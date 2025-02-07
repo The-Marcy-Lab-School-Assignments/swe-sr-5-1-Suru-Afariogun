@@ -6,10 +6,10 @@ For guidance on setting up and submitting this assignment, refer to the Marcy la
 
 Imagine you are teaching a friend about OOP. They mainly want to understand what is Encapsulation. Write a brief lesson on Encapsulation that includes the following:
 
-* What is encapsulation?
-* What major goal does this help to achieve in software engineering?
-* Give an example (in code) of encapsulation.
-* An explanation of how the code example demonstrates encapsulation
+- What is encapsulation?
+- What major goal does this help to achieve in software engineering?
+- Give an example (in code) of encapsulation.
+- An explanation of how the code example demonstrates encapsulation
 
 ### Response 1
 
@@ -19,17 +19,16 @@ The following `friendsManager` object is an example of an interface that is **NO
 
 ```js
 const friendsManager = {
- friends: [],
- addFriend(newFriend) {
-   if (typeof newFriend !== 'string') return;
-   this.friends.push(newFriend);
- }
-}
+  friends: [],
+  addFriend(newFriend) {
+    if (typeof newFriend !== "string") return;
+    this.friends.push(newFriend);
+  },
+};
 
-
-friendsManager.addFriend('daniel');
+friendsManager.addFriend("daniel");
 friendsManager.addFriend(true);
-friendsManager.friends.push('emmaneul');
+friendsManager.friends.push("emmaneul");
 friendsManager.friends.push(42);
 ```
 
@@ -37,9 +36,40 @@ Explain how the code is not consistent or predictable, then provide an example i
 
 ### Response 2
 
+The friendsManager object is not consistent or predictable because the friends array is publicly accessible, allowing external code to push invalid values; this bypasses the validation logic in the addFriend method. The addFriend method only prevents non-string values from being added when using the method, but the friends array can still be modified directly. Anyone can modify friends directly, leading to potential unintended behavior.  
+To fix these issues, we can use a closure to encapsulate the friends array, making it private and only allowing modifications through controlled methods:
+
+```js
+const createFriendsManager = () => {
+  let friends = [];
+
+  return {
+    addFriend(newFriend) {
+      if (typeof newFriend !== "string") {
+        console.log("Invalid input: Friend name must be a string.");
+        return;
+      }
+      friends.push(newFriend);
+    },
+    getFriends() {
+      return [...friends];
+    },
+  };
+};
+
+const friendsManager = createFriendsManager();
+
+friendsManager.addFriend("Daniel");
+friendsManager.addFriend(true);
+console.log(friendsManager.getFriends());
+
+friendsManager.friends = ["Hacker"];
+console.log(friendsManager.getFriends());
+```
+
 ## Prompt 3
 
-With OOP in JavaScript, it's possible to use factory functions to achieve encapsulation and re-use them to make objects that look alike. However, factory functions have drawbacks and we often use classes instead. 
+With OOP in JavaScript, it's possible to use factory functions to achieve encapsulation and re-use them to make objects that look alike. However, factory functions have drawbacks and we often use classes instead.
 
 How would you explain to a budding developer what the drawbacks of using factory functions are and why it is better to use classes instead?
 
@@ -49,11 +79,12 @@ How would you explain to a budding developer what the drawbacks of using factory
 
 Do some research on the history of when / how classes were introduced into JavaScript and share your findings. Your response should include:
 
-* What version of JavaScript were classes introduced in and when did it come out?
-* Why were classes introduced into JavaScript?
-
+- What version of JavaScript were classes introduced in and when did it come out?
+- Why were classes introduced into JavaScript?
 
 ### Response 4
+
+JavaScript classes were introduced in ECMAScript 6 (ES6), which was released in 2015, to provide a cleaner and more structured approach to object-oriented programming. Before ES6, JavaScript relied on constructor functions and prototypes, which could be confusing and less intuitive. The introduction of classes improved readability and maintainability by offering a more organized syntax similar to languages like Java and Python. It also simplified inheritance with the extends keyword, making it easier to create subclasses without manually modifying prototype chains. Additionally, classes helped contain logic by automatically adding methods to the prototype, optimizing memory usage. While JavaScript classes did not change the prototype-based nature of the language, they made object-oriented programming more accessible and easier to understand, benefiting developers transitioning from other programming languages.
 
 ## Prompt 5
 
@@ -61,17 +92,15 @@ OOP can still be achieved in JavaScript without using the `class` keyword and in
 
 ```js
 function Person(name, age) {
- this.name = name;
- this.age = age;
+  this.name = name;
+  this.age = age;
 }
 
-
 Person.prototype.greet = function () {
- return `Hi, I'm ${this.name}, and I'm ${this.age} years old.`;
+  return `Hi, I'm ${this.name}, and I'm ${this.age} years old.`;
 };
 
-
-const alice = new Person('Alice', 30);
+const alice = new Person("Alice", 30);
 console.log(alice.greet());
 ```
 
